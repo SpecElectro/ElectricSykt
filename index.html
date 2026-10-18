@@ -413,37 +413,51 @@
       btn.disabled = true;
       showStatus('loading', 'Отправляем...');
 
-      try {
-  
+     try {
+  // Адрес твоего воркера
   const WORKER_URL = 'https://specelectro.7m49n55bd9.workers.dev';
   
-  const res = await fetch(WORKER_URL, {
+  // Токен и chat_id (нужны для формирования ссылки)
+  const BOT_TOKEN = '8950454824:AAG1FiiqHunklW4pb6jJV8JSE79gmFVc4NQ';
+  const CHAT_ID = '5789040871';
+
+  // Формируем текст сообщения
+  const tgText = '🔧 *Новая заявка с сайта*\n\n' +
+    '👤 Имя: ' + name + '\n' +
+    '📞 Телефон: ' + phone + '\n' +
+    (comment ? '📝 Задача: ' + comment + '\n' : '') +
+    '🕒 ' + new Date().toLocaleString('ru-RU');
+
+  // Формируем ссылку на Telegram API, которую завернем в прокси
+  const tgApiUrl = 'https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage';
+  
+  // Отправляем запрос на наш Cloudflare Worker, передавая ему ссылку на Telegram
+  const res = await fetch(WORKER_URL + '?url=' + encodeURIComponent(tgApiUrl), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: name, phone: phone, comment: comment })
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: tgText,
+      parse_mode: 'Markdown'
+    })
   });
-      
-        const data = await res.json();
-        
-        if (data.ok) {
-          showStatus('success', '✅ Спасибо, ' + name + '! Заявка отправлена.');
-          this.reset();
-          if (this.closest('.modal')) {
-            setTimeout(() => closeModal(), 2000);
-          }
-        } else {
-          showStatus('error', 'Ошибка отправки. Позвоните: +7 (906) 882-17-24');
-          console.error('Telegram error:', data);
-        }
-      } catch (err) {
-        showStatus('error', 'Ошибка сети. Позвоните: +7 (906) 882-17-24');
-        console.error(err);
-      } finally {
-        btn.disabled = false;
-      }
-    });
-  });
-
+  
+  const data = await res.json();
+  
+  if (data.ok) {
+    showStatus('success', '✅ Спасибо, ' + name + '! Заявка отправлена.');
+    this.reset();
+    if (this.closest('.modal')) {
+      setTimeout(() => closeModal(), 2000);
+    }
+  } else {
+    showStatus('error', 'Ошибка отправки. Позвоните: +7 (906) 882-17-24');
+    console.error('Ошибка прокси:', data);
+  }
+} catch (err) {
+  showStatus('error', 'Ошибка сети. Позвоните: +7 (906) 882-17-24');
+  console.error(err);
+}
   // 3. МОДАЛЬНОЕ ОКНО (POP-UP)
   const overlay = document.getElementById('modalOverlay');
   const closeBtn = document.getElementById('modalClose');

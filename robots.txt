@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://specelectro.github.io/ElectricSykt/sitemap.xml

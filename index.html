@@ -414,16 +414,15 @@
       showStatus('loading', 'Отправляем...');
 
       try {
-        const res = await fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: TG_CHAT_ID,
-            text: text,
-            parse_mode: 'Markdown'
-          })
-        });
-        
+  // Вставляем ссылку на твой Cloudflare Worker
+  const WORKER_URL = 'https://specelectro.7m49n55bd9.workers.dev';
+  
+  const res = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, phone: phone, comment: comment })
+  });
+      
         const data = await res.json();
         
         if (data.ok) {

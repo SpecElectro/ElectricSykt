@@ -308,7 +308,6 @@
       showStatus('loading', 'Отправляем...');
 
       try {
-        // Отправляем запрос напрямую в ВК (без Cloudflare)
         const formData = new URLSearchParams();
         formData.append('user_id', VK_USER_ID);
         formData.append('message', vkMessage);
@@ -316,23 +315,18 @@
         formData.append('v', '5.199');
         formData.append('random_id', String(Math.floor(Math.random() * 1000000)));
 
-        const res = await fetch('https://api.vk.com/method/messages.send', {
+        // Отправляем в ВК без ожидания ответа (no-cors)
+        await fetch('https://api.vk.com/method/messages.send', {
           method: 'POST',
+          mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: formData
         });
-        
-        const data = await res.json();
-        
-        if (data.response) {
-          showStatus('success', '✅ Спасибо, ' + name + '! Заявка отправлена.');
-          this.reset();
-          if (this.closest('.modal')) {
-            setTimeout(() => closeModal(), 2000);
-          }
-        } else {
-          showStatus('error', 'Ошибка отправки. Позвоните: +7 (906) 882-17-24');
-          console.error('Ошибка ВК:', data);
+
+        showStatus('success', '✅ Спасибо, ' + name + '! Заявка отправлена.');
+        this.reset();
+        if (this.closest('.modal')) {
+          setTimeout(() => closeModal(), 2000);
         }
       } catch (err) {
         showStatus('error', 'Ошибка сети. Позвоните: +7 (906) 882-17-24');

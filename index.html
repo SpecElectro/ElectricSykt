@@ -3,7 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>СпецЭлектро — надёжный электрик на дом</title>
+<title>Электрик в Сыктывкаре — вызов на дом | СпецЭлектро</title>
+<meta name="description" content="Надёжный электрик в Сыктывкаре. Подключение техники, сборка щитов, электрика под ключ. Гарантия до 2 лет. Выезд в удобное время.">
+
+<!-- Микроразметка для поисковиков (Schema.org) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Electrician",
+  "name": "СпецЭлектро",
+  "url": "https://specelectro.github.io/ElectricSykt/",
+  "telephone": "+79068821724",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Первомайская, 62",
+    "addressLocality": "Сыктывкар",
+    "addressCountry": "RU"
+  },
+  "priceRange": "от 300 ₽",
+  "description": "Услуги электрика на дом в Сыктывкаре: подключение бытовой техники, монтаж электрощитов, ремонт проводки."
+}
+</script>
+
 <style>
   :root{
     --blue:#1e6fd9;--blue-dark:#1456a8;--orange:#ff7a00;
@@ -114,7 +135,7 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Надёжный электрик на дом — гарантия на работы до 2 лет</h1>
+    <h1>Надёжный электрик в Сыктывкаре — гарантия на работы до 2 лет</h1>
     <ul class="hero-list">
       <li>🏠 Электрика под ключ (черновой и чистовой ремонт)</li>
       <li>⚡ Сборка электрощита</li>
@@ -315,7 +336,6 @@
         formData.append('v', '5.199');
         formData.append('random_id', String(Math.floor(Math.random() * 1000000)));
 
-        // Отправляем в ВК без ожидания ответа (no-cors)
         await fetch('https://api.vk.com/method/messages.send', {
           method: 'POST',
           mode: 'no-cors',
